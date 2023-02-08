@@ -1,0 +1,426 @@
+//BRACKET BALANCING
+static boolean solve(String str)
+    {
+        Stack<Character> s=new Stack<>();
+        for(int i=0;i<str.length();i++)
+        {
+            char ch=str.charAt(i);
+            if(ch=='[' || ch=='(' || ch=='{')
+            {
+                s.push(ch);
+            }
+            else{
+                if(!s.empty()) {
+                    char top=s.peek();
+                    if((top=='(') && ch==')'|| (top=='[') && ch==']' || (top=='{') && ch=='}')
+                    {
+                        s.pop();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+        if(s.empty())
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+
+//K GROUP REVERSING IN ARRAY
+static void solve(int arr[],int n,int k)
+    {
+        for(int i=0;i<n;i+=k)
+        {
+            int left=i;
+            int right=Math.min(i+k-1,n-1);
+            while(left<right)
+            {
+                int temp=arr[left];
+                arr[left]=arr[right];
+                arr[right]=temp;
+                left++;
+                right--;
+            }
+        }
+    }
+
+
+
+//REMOVE ELEMENT FROM BST
+import java.util.*;
+class Node{
+    int data;
+    Node left;
+    Node right;
+    Node(int val)
+    {
+        this.data=val;
+        this.left=null;
+        this.right=null;
+    }
+}
+public class Main {
+    static int minVal(Node root)
+    {
+        while(root.left!=null)
+        {
+            root=root.left;
+        }
+        return root.data;
+    }
+    static Node deleteFromBST(Node root,int x)
+    {
+        if(root==null)
+        {
+            return null;
+        }
+        if(root.data==x)
+        {
+            //0 child
+            if(root.left==null && root.right==null)
+            {
+                return null;
+            }
+
+            //1 child
+            if(root.left!=null && root.right==null)
+            {
+                return root.left;
+            }
+            if(root.left==null && root.right!=null)
+            {
+                return root.right;
+            }
+
+            //2 child
+            if(root.left!=null && root.right!=null)
+            {
+                int mini=minVal(root.right);
+                root.data=mini;
+                root.right=deleteFromBST(root.right,mini);
+            }
+        }
+        else if(root.data>x)
+        {
+            root.left=deleteFromBST(root.left,x);
+        }
+        else{
+            root.right=deleteFromBST(root.right,x);
+        }
+        return root;
+    }
+    static Node insertInBST(Node root,int data)
+    {
+        if(root==null)
+        {
+            return new Node(data);
+        }
+        if(data<root.data)
+        {
+            root.left=insertInBST(root.left,data);
+        }
+        else if(data>root.data){
+            root.right=insertInBST(root.right,data);
+        }
+        return root;
+    }
+    static Node takeInput(Node root,int n,Scanner sc)
+    {
+        while(n!=0)
+        {
+            int data=sc.nextInt();
+            root=insertInBST(root,data);
+            n--;
+        }
+        return root;
+    }
+    static void inorder(Node root)
+    {
+        if(root==null)
+        {
+            return;
+        }
+        inorder(root.left);
+        System.out.print(root.data+" ");
+        inorder(root.right);
+    }
+    public static void main(String[] args)
+    {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        Node root=null;
+        root=takeInput(root,n,sc);
+        int del=sc.nextInt();
+        root=deleteFromBST(root,del);
+        inorder(root);
+    }
+}
+
+
+
+
+///BFS OR LVLORDER TRAVERSAL IN BST
+package com.company;
+import java.util.*;
+class Node{
+    int data;
+    Node left;
+    Node right;
+    Node(int val)
+    {
+        this.data=val;
+        this.left=null;
+        this.right=null;
+    }
+}
+public class Main {
+
+    static Node insertInBST(Node root,int data)
+    {
+        if(root==null)
+        {
+            return new Node(data);
+        }
+        if(data<root.data)
+        {
+            root.left=insertInBST(root.left,data);
+        }
+        else if(data>root.data){
+            root.right=insertInBST(root.right,data);
+        }
+        return root;
+    }
+    static Node takeInput(Node root,int n,Scanner sc)
+    {
+        while(n!=0)
+        {
+            int data=sc.nextInt();
+            root=insertInBST(root,data);
+            n--;
+        }
+        return root;
+    }
+    static void levelOrderPrint(Node root)
+    {
+        Queue<Node> q=new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty())
+        {
+            Node temp=q.peek();
+            q.remove();
+            System.out.print(temp.data+" ");
+            if(temp.left!=null)
+            {
+                q.add(temp.left);
+            }
+            if(temp.right!=null)
+            {
+                q.add(temp.right);
+            }
+        }
+    }
+    public static void main(String[] args)
+    {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        Node root=null;
+        root=takeInput(root,n,sc);
+        levelOrderPrint(root);
+    }
+}
+
+
+
+
+///INTERSECTION OF TWO ARRAYS
+static int[] intersection(int arr1[],int n,int arr2[],int m)
+    {
+        ArrayList<Integer> list=new ArrayList<>();
+        for(int j=0;j<m;j++)
+        {
+            for(int i=0;i<n;i++)
+            {
+                if(arr1[i]==arr2[j])
+                {
+                    list.add(arr1[i]);
+                    arr1[i]=-1;
+                    break;
+                }
+            }
+        }
+        int ans[]=new int[list.size()];
+        int index=0;
+        for(int i:list)
+        {
+            ans[index++]=i;
+        }
+        return ans;
+    }
+
+
+
+//NTH FIBONACCHI
+import java.util.*;
+public class Main {
+    public static void main(String[] args)
+    {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int dp[]=new int[n+1];
+        dp[0]=0;
+        dp[1]=1;
+        for(int i=2;i<=n;i++)
+        {
+            dp[i]=dp[i-1]+dp[i-2];
+        }
+        System.out.println(dp[n]);
+    }
+}
+
+
+//CLIMBING STAIRS
+    static int fib(int n)
+    {
+        int dp[]=new int[n+1];
+        dp[0]=0;
+        dp[1]=1;
+        for(int i=2;i<=n;i++)
+        {
+            dp[i]=dp[i-1]+dp[i-2];
+        }
+        return dp[n];
+    }
+    static int countWays(int n)
+    {
+        return fib(n + 1);
+    }
+
+
+
+///ALICE AND BOB CAR RACE 
+import java.util.*;
+public class Main {
+    public static void main(String[] args)
+    {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        HashMap<Integer,Integer> map=new HashMap<>();
+        for(int i=0;i<n;i++)
+        {
+            int data=sc.nextInt();
+            if(map.containsKey(data))
+            {
+                map.put(data,map.get(data)+1);
+            }
+            else{
+                map.put(data,1);
+            }
+        }
+        int maxKey=0;
+        int maxVal=Integer.MIN_VALUE;
+        for(int i:map.keySet())
+        {
+            if(map.get(i)>maxVal)
+            {
+                maxKey=i;
+                maxVal=map.get(i);
+            }
+        }
+        System.out.println(maxKey);
+    }
+}
+
+
+
+////COINS NO. OF WAYS TO MAKE CHANGES
+    static int count(int coins[], int n, int sum)
+    {
+        if (sum == 0)
+            return 1;
+        if (sum < 0)
+            return 0;
+        if (n <= 0)
+            return 0;
+        return count(coins, n - 1, sum)+ count(coins, n, sum - coins[n - 1]);
+    }
+
+
+
+///KTH LARGEST ELEMENT IN ARRAY
+    static int kLargest(int arr[],int n,int k)
+    {
+        PriorityQueue<Integer> pq=new PriorityQueue<>();
+        for(int i=0;i<k;i++)
+        {
+            pq.add(arr[i]);
+        }
+        for(int i=k;i<n;i++)
+        {
+            if(arr[i]>pq.peek())
+            {
+                pq.poll();
+                pq.add(arr[i]);
+            }
+        }
+        return pq.peek();
+    }
+
+
+
+//KTH SMALLEST ELEMENT IN ARRAY
+    static int kSmallest(int arr[],int n,int k)
+    {
+        PriorityQueue<Integer> pq=new PriorityQueue<>(Collections.reverseOrder());
+        for(int i=0;i<k;i++)
+        {
+            pq.add(arr[i]);
+        }
+        for(int i=k;i<n;i++)
+        {
+            if(arr[i]<pq.peek())
+            {
+                pq.poll();
+                pq.add(arr[i]);
+            }
+        }
+        return pq.peek();
+    }
+
+
+//KNAPSACK - PACKING FOR VACATION
+    static int solve(int wt[],int val[],int i,int capacity)
+    {
+        if(i==0)
+        {
+            if(wt[0]<capacity)
+            {
+                return val[0];
+            }
+            else {
+                return 0;
+            }
+        }
+        int include=0;
+        if(wt[i]<capacity)
+        {
+            include=val[i]+solve(wt,val,i-1,capacity-wt[i]);
+        }
+        int exclude=solve(wt,val,i-1,capacity);
+        int ans=Math.max(include,exclude);
+        return ans;
+    }
+    static int knapSack(int wt[],int val[],int n,int capacity)
+    {
+        return solve(wt,val,n-1,capacity);
+    }
